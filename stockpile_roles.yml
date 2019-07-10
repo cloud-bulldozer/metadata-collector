@@ -1,0 +1,15 @@
+---
+- hosts: all
+  remote_user: "{{ host_remote_user }}"
+  become: true
+  roles:
+    - packages
+    - cpu
+    - cpu_vulnerabilities
+    - dmidecode
+
+- hosts: stockpile
+  gather_facts: false
+  remote_user: "{{ stockpile_user }}"
+  roles:
+    - dump-facts
