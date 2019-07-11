@@ -3,7 +3,8 @@
   remote_user: "{{ host_remote_user }}"
   become: true
   roles:
-    - packages
+    # Packages is currently broken
+#    - packages
     - cpu
     - cpu_vulnerabilities
     - dmidecode

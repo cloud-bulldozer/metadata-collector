@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backpack
+  namespace: ripsaw # Namespace to run in
+spec:
+  selector:
+    matchLabels:
+      app: backpack
+  replicas: 1 # Number of nodes in the namespace
+  template:
+    metadata:
+      labels:
+        app: backpack
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - backpack
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: backpack
+        # Replace this with the built image name
+        image: quay.io/dry923/backpack:stockpile
+        imagePullPolicy: Always
