@@ -1,13 +1,11 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: backpack
   namespace: ripsaw # Namespace to run in
 spec:
   selector:
-    matchLabels:
-      app: backpack
-  replicas: 1 # Number of nodes in the namespace
+  parallelism: 1 # Number of nodes in the namespace
   template:
     metadata:
       labels:
@@ -28,3 +26,7 @@ spec:
         # Replace this with the built image name
         image: quay.io/dry923/backpack:stockpile
         imagePullPolicy: Always
+        securityContext:
+          privileged: true
+      restartPolicy: Never
+

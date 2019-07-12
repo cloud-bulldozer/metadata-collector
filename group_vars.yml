@@ -6,4 +6,4 @@ host_remote_user: root
 
 home_dir: "{{ ansible_env.HOME }}"
 stockpile_path: "/opt/stockpile"
-stockpile_output_path: "/machine_facts.json"
+stockpile_output_path: "/tmp/machine_facts.json"

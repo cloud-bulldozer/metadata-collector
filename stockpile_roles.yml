@@ -1,10 +1,10 @@
 ---
 - hosts: all
   remote_user: "{{ host_remote_user }}"
-  become: true
+  #become: true
   roles:
     # Packages is currently broken
-#    - packages
+    #- packages
     - cpu
     - cpu_vulnerabilities
     - dmidecode
