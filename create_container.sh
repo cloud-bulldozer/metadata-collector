@@ -9,6 +9,7 @@ cp Dockerfile stockpile/
 cp group_vars.yml stockpile/group_vars/all.yml
 cp stockpile_hosts stockpile/hosts
 cp ansible.cfg stockpile/ansible.cfg
+cp -r roles/* stockpile/roles
 
 #This should really be changed in upstream stockpile to add tags to each role so we can pick what we want to run
 cp stockpile_roles.yml stockpile/stockpile.yml
