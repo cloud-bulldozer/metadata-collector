@@ -5,7 +5,8 @@ To create a new container image modify the Dockerfile and then run create_contai
 Any additional roles you would like to add that are outside of what is available in stockpile,
 please add them to the roles directory and update stockpile_roles.yml appropriately.
 This will get copied over to the image during the create_container.sh run.
-NOTE: you will want to update create_container.sh to use your own image repository
+
+NOTE: Update create_container.sh and backpack.yaml to use your own image repository if building a new image.
 
 backpack.yaml is to be run on a container platform.
 NOTE: On kni based environments it needs to run priviliged. To do this set Allow Privileged to true in the restricted scc
