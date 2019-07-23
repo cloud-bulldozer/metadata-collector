@@ -6,7 +6,7 @@ COPY stockpile.yml ${HOME}/stockpile.yml
 COPY hosts ${HOME}/hosts
 COPY ansible.cfg ${HOME}/
 
-RUN yum install -y ansible dmidecode which lspcu
+RUN yum install -y ansible dmidecode which lscpu
 RUN mv ansible.cfg /etc/ansible/ansible.cfg
 RUN mkdir -p /tmp
 RUN sed -i '/become: true/d' roles/dmidecode/tasks/main.yml
