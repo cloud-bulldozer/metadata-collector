@@ -11,6 +11,11 @@ sudo rm -rf snafu
 ## FIX THIS TO BE UPSTREAM SNAFU ONCE MERGED
 git clone --branch backpack https://github.com/dry923/snafu.git
 
+## Clone scribe and copy into stockpile
+sudo rm -rf scribe
+
+git clone https://github.com/redhat-performance/scribe.git
+
 cp Dockerfile stockpile/
 cp group_vars.yml stockpile/group_vars/all.yml
 cp stockpile_hosts stockpile/hosts
@@ -26,7 +31,9 @@ cp stockpile_roles.yml stockpile/stockpile.yml
 ## Copy snafu wrapper into stockpile
 cp snafu/backpack-wrapper/backpack-wrapper.py stockpile/backpack-wrapper.py
 
+cp -r scribe stockpile/
+
 cd stockpile
 
 # Modify this to whatever image repo to use
-sudo docker build --tag=quay.io/dry923/backpack:stockpile_snafu . && sudo docker push quay.io/dry923/backpack:stockpile_snafu
+sudo docker build --tag=quay.io/dry923/backpack:stockpile . && sudo docker push quay.io/dry923/backpack:stockpile
