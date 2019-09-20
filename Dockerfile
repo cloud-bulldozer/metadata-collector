@@ -17,6 +17,7 @@ RUN pip install -e scribe/
 RUN mv ansible.cfg /etc/ansible/ansible.cfg
 RUN mkdir -p /tmp
 RUN sed -i '/become: true/d' roles/dmidecode/tasks/main.yml
+RUN sed -i 's/become: true/ignore_errors: yes/' stockpile.yml
 
 CMD ansible-playbook -c local stockpile.yml > /dev/null 2>&1 && cat /tmp/machine_facts.json
 

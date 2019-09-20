@@ -24,7 +24,7 @@ spec:
       containers:
       - name: backpack
         # Replace this with the built image name
-        image: quay.io/dry923/backpack:stockpile
+        image: quay.io/dry923/backpack:stockpile_test
         command: ["python"]
         args: ["backpack-wrapper.py", "-f", "/tmp/machine_facts.json", "-s", "bullwinkle-elk.rdu.openstack.engineering.redhat.com", "-p", "9200"]
         imagePullPolicy: Always
