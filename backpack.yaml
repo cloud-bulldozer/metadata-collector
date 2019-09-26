@@ -1,34 +1,24 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: apps/v1
+kind: DaemonSet
 metadata:
   name: backpack
-  namespace: my-ripsaw # Namespace to run in
+  namespace: backpack
 spec:
   selector:
-  parallelism: 1 # Number of nodes in the namespace
+    matchExpressions:
+      - key: app
+        operator: NotIn
+        values:
+        - backpack
   template:
     metadata:
       labels:
-        app: backpack
+        name: backpack
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchExpressions:
-              - key: app
-                operator: In
-                values:
-                - backpack
-            topologyKey: "kubernetes.io/hostname"
       containers:
       - name: backpack
-        # Replace this with the built image name
-        image: quay.io/dry923/backpack:stockpile
-        command: ["python"]
-        args: ["backpack-wrapper.py", "-f", "/tmp/machine_facts.json", "-s", "bullwinkle-elk.rdu.openstack.engineering.redhat.com", "-p", "9200"]
+        image: quay.io/dry923/backpack:daemon
         imagePullPolicy: Always
         securityContext:
           privileged: true
-      restartPolicy: Never
-
+      terminationGracePeriodSeconds: 30
