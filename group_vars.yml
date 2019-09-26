@@ -7,3 +7,4 @@ host_remote_user: root
 home_dir: "{{ ansible_env.HOME }}"
 stockpile_path: "/opt/stockpile"
 stockpile_output_path: "/tmp/machine_facts.json"
+tmp_dir: /tmp/container/new
