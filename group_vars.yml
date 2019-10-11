@@ -3,8 +3,8 @@
 stockpile_user: root
 local_remote_user: root
 host_remote_user: root
-
+container_cli: docker
 home_dir: "{{ ansible_env.HOME }}"
-stockpile_path: "/opt/stockpile"
-stockpile_output_path: "/tmp/machine_facts.json"
-tmp_dir: /tmp/container/new
+stockpile_output_path: /tmp/stockpile.json
+backpack_output_dir: /tmp/container/new
+container_remote_user: root
