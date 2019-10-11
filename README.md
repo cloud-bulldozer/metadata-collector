@@ -3,18 +3,23 @@ Containerization of the Stockpile project (https://github.com/redhat-performance
 
 To create a new container image modify the Dockerfile and then run create_container.sh.
 
-NOTE: Update create_container.sh and backpack.yaml to use your own image repository if building a new image.
+NOTE: Update create_container.sh and backpack.yml to use your own image repository if building a new image.
 
-backpack.yaml is to be run on a container platform. However, the container can
-run on with generic Docker/podman as well.
-NOTE: The container needs to run priviliged on OpenShift based systems.
-To do this set Allow Privileged to true in the restricted scc
+backpack.yml is to be run on a container platform. However, the container can
+run via Docker/podman as well.
 
-It has been tested on minikube and kni.
+You will need to update the backpack.yml file to supply your own trunc_uuid for unique identification
+as well as adjust the securityContext and serviceAccountName.
+
+If not privileged and with the default service account the data gathered will be limited.
+If you wish to obtain the full set of information you will need to allow the containers to be 
+privileged and setup a service account with proper read/view privileges. Please see
+backpack_role.yaml for a correctly configured service account.
 
 It will launch the backpack daemon set, which is the containerized stockpile 
-we built above, on all nodes of the cluster. 
-Note: since it is a daemon set it will restart once complete (there is a 1 hour
-wait after the stockpile job runs so be sure to get the logs at that time).
+we built above, on all nodes of the cluster (including the masters). 
+Note: It will not reach "running" state until after the stockpile collection is complete.
+Additionally, it will never go to complete state as the DaemonSet would restart it so
+it will need to be cleaned up once you are finished with it.
 
-The data is written to stdout in the container. To obtain this information view the logs of the individual container.
+The data is written to /tmp/stockpile.json in the container.
