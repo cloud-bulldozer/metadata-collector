@@ -11,7 +11,7 @@ COPY scribe ${HOME}/scribe
 COPY kubectl /usr/local/bin/kubectl
 
 RUN yum install -y epel-release 
-RUN yum install -y ansible dmidecode which python-pip
+RUN yum install -y ansible dmidecode which python-pip pciutils
 RUN pip3 install --upgrade pip
 RUN pip3 install elasticsearch
 RUN pip3 install openshift
