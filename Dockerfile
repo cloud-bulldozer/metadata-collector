@@ -13,9 +13,10 @@ COPY kubectl /usr/local/bin/kubectl
 RUN yum install -y epel-release 
 RUN yum install -y ansible dmidecode which python-pip pciutils
 RUN pip3 install --upgrade pip
-RUN pip3 install elasticsearch
+RUN pip3 install elasticsearch-dsl
 RUN pip3 install openshift
 RUN pip3 install kubernetes
+RUN pip3 install redis
 RUN pip3 install -e scribe/
 RUN mv ansible.cfg /etc/ansible/ansible.cfg
 RUN mkdir -p /tmp
