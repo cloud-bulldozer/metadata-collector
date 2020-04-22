@@ -23,3 +23,12 @@ Additionally, it will never go to complete state as the DaemonSet would restart 
 it will need to be cleaned up once you are finished with it.
 
 The data is written to /tmp/stockpile.json in the container.
+
+If you want to disable backpack because you are debugging a ripsaw workload, etc., you can do so by
+setting metadata_collection: false in the ripsaw CR.
+
+Backpack will create multiple indexes in the targeted Elasticsearch server, depending on
+which metadata collection modules run.   These indexes all have names with "-metadata" in the 
+suffix so they are not hard to find.   The contents are usually self-explanatory and
+can be browsed with kibana for example.
+
