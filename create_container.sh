@@ -24,8 +24,9 @@ cp ansible.cfg stockpile/ansible.cfg
 cp stockpile-wrapper.py stockpile/stockpile-wrapper.py
 cp -r scribe stockpile/
 cp kubectl stockpile/
+cp oc stockpile/
 
 cd stockpile
 
 # Modify this to whatever image repo to use
-podman build --tag=quay.io/cloud-bulldozer/backpack:latest . && podman push quay.io/cloud-bulldozer/backpack:latest
+sudo podman build --tag=quay.io/cloud-bulldozer/backpack:latest . && sudo podman push quay.io/cloud-bulldozer/backpack:latest
