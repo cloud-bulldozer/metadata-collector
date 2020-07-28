@@ -1,0 +1,63 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: backpack-{UUID}
+  namespace: {NAMESPACE}
+spec:
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+        - backpack-{UUID}
+  template:
+    metadata:
+      labels:
+        name: backpack-{UUID}
+        app: backpack-{UUID}
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+####
+# TO target specific nodes with a matching label update the below
+#      affinity:
+#        nodeAffinity:
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#            nodeSelectorTerms:
+#            - matchExpressions:
+#              - key: [LABEL NAME]
+#                operator: In
+#                values:
+#                - [LABEL VALUE]
+####
+      containers:
+      - name: backpack
+        image: {IMAGE}
+        command: ["/bin/sh", "-c"]
+        args: ["python3 stockpile-wrapper.py {ELASTICSEARCH_SERVER} {ELASTICSEARCH_PORT} -u {UUID} -n $my_node_name -N $my_pod_name --force && touch /tmp/indexed; sleep infinity"]
+        imagePullPolicy: Always
+        # Set privileged to the appropriate value [true|false]
+        securityContext:
+          privileged: {PRIV}
+        readinessProbe:
+          exec:
+            command:
+              - ls
+              - /tmp/indexed
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 500
+        env:
+          - name: my_node_name
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: my_pod_name
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+      # If using a specific service account name set it below
+      serviceAccountName: {ACCOUNT}
+      terminationGracePeriodSeconds: 30

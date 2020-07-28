@@ -107,18 +107,26 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - list
+  - watch
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: backpack-view
-  namespace: my-ripsaw
+  namespace: {NAMESPACE}
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: backpack-view
-  namespace: my-ripsaw
+  namespace: {NAMESPACE}
   annotations:
     kubernetes.io/service-account.name: backpack-view
 type: kubernetes.io/service-account-token
@@ -127,7 +135,7 @@ kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: backpack-view
-  namespace: my-ripsaw
+  namespace: {NAMESPACE}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -135,4 +143,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: backpack-view
-  namespace: my-ripsaw
+  namespace: {NAMESPACE}
