@@ -49,7 +49,7 @@ sed -i "s/{ELASTICSEARCH_PORT}/-p $ES_PORT/g" backpack_$UUID.yml
 sed -i "s/{PRIV}/$PRIVILEGED/g" backpack_$UUID.yml
 sed -i "s?{IMAGE}?$IMAGE?g" backpack_$UUID.yml
 
-if [[ $ACCOUNT -eq "true" ]]
+if [[ $ACCOUNT == "true" ]]
 then
   sed -i "s/{ACCOUNT}/backpack-view/g" backpack_$UUID.yml
 else
@@ -74,7 +74,7 @@ fi
 
 kubectl create namespace $NAMESPACE
 
-if [[ $ACCOUNT -eq "true" ]]
+if [[ $ACCOUNT == "true" ]]
 then
   cp backpack_role.yaml backpack_role_$UUID.yaml
   sed -i "s/{NAMESPACE}/$NAMESPACE/g" backpack_role_$UUID.yaml
@@ -88,9 +88,9 @@ do
   sleep 15
 done
 
-if [[ $CLEANUP -eq "true" ]]
+if [[ $CLEANUP == "true" ]]
 then
-  if [[ $ACCOUNT -eq "true" ]]
+  if [[ $ACCOUNT == "true" ]]
   then
     kubectl delete -f backpack_role_$UUID.yaml
   fi
