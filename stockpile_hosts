@@ -1,0 +1,6 @@
+[instance]
+# List of hosts which we want to gather information from
+localhost ansible_connection=local
+[stockpile]
+# The host stockpile is running from
+localhost ansible_connection=local

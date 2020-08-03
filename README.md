@@ -4,13 +4,19 @@ Metadata collection and indexing tool.
 Metadata is obtained by using the Stockpile project (https://github.com/redhat-performance/stockpile) within the container.
 Doing so eliminates the need to install additional packages on systems which may be imutable
 
-# Creating a new image
+## Creating a new image
 
-To create a new container image modify the Dockerfile and then run create_container.sh.
+To create a new container image execute `./hack/build.sh`. This script by default builds and pushes the backpack image to `quay.io/cloud-bulldozer/backpack:latest`.
+To use your own repository, you can overwrite the default location with:
 
-NOTE: Update create_container.sh and backpack.yml to use your own image repository if building a new image.
+```console
+$ REGISTRY=docker.io ORG=organization REPOSITORY=handbag TAG=mytag hack/build.sh
+Building docker.io/organization/handbag:mytag
+STEP 1: FROM registry.access.redhat.com/ubi8:latest
+etc.
+```
 
-# Basic information
+## Basic information
 
 The main script within backpack is the stockpile-wrapper. This can be located [here](https://github.com/cloud-bulldozer/bohica/blob/master/stockpile-wrapper/stockpile-wrapper.py).
 
@@ -22,7 +28,7 @@ The two flags to the wrapper that will likely always be used is for indexing. Us
 python3 stockpile-wrapper.py -s foo.es -p 9200
 ```
 
-# Running with Podman/Docker
+## Running with Podman/Docker
 
 In many cases backpack will be run with some container orchestration, however it can be run easily with podman as well.
 
@@ -32,7 +38,7 @@ sudo podman run --privileged quay.io/cloud-bulldozer/backpack python3 stockpile-
 
 *NOTE* While it is not required to run the container in privileged mode, you will get far less information if done without privileges.
 
-# Running with run_backpack.sh
+## Running with run_backpack.sh
 
 Backpack can be easily executed with the run_backpack.sh script in the kubernetes environment as well
 
@@ -49,7 +55,7 @@ The script takes a few notable options:
 - -i: custom backpack image location
 - -h: help page
 
-*NOTE* If using the lable name/value and no node is found to match the script will quickly create and delete the daemonset
+*NOTE* If using the label name/value and no node is found to match the script will quickly create and delete the daemonset
 
 *NOTE* If -c is false (the default) then the daemonset will not be cleaned up and you can reference the pods at any time
 
@@ -74,7 +80,7 @@ daemonset.apps "backpack-60ebe07c-5944-4169-8c4e-fbf9f9d79ad0" deleted
 
 *NOTE* If you see an error that states the namespace already exists it is safe to ignore.
 
-# Privileges
+## Privileges
 
 If not privileged and with the default service account the data gathered will be limited.
 If you wish to obtain the full set of information you will need to allow the containers to be 
