@@ -83,7 +83,7 @@ fi
 
 kubectl apply -f backpack_$UUID.yml
 
-while [[ `kubectl -n backpack get pods -l=name=backpack-$UUID -o jsonpath='{range .items[*]}{.status.containerStatuses[*].ready}{"\n"}{end}' | grep false` ]]
+while [[ `kubectl -n $NAMESPACE get pods -l=name=backpack-$UUID -o jsonpath='{range .items[*]}{.status.containerStatuses[*].ready}{"\n"}{end}' | grep false` ]]
 do
   sleep 15
 done
