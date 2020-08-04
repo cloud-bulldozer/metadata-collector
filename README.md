@@ -40,8 +40,7 @@ The script takes a few notable options:
 - -s: the elasticsearch server
 - -p: the elasticsearch port
 - -n: the namespace to be used (it will be created if it does not already exist but will NOT be delete)
-- -x: true|false - if the pods should run with elevated privileges
-- -a: true|false - if you wish to apply the backpack-view service account and role to gather additional details
+- -x: the pods should run with elevated privileges and a service account with elevated access
 - -c: true|false - if true after all pods have collected their data the daemonset will be cleaned up
 - -u: UUID - if you wish to pass a specific UUID otherwise one will be generated for you
 - -l: label name - if you wish to target servers with a specific label you can enter the label name here. It is expected to be used with -v for the value
@@ -78,8 +77,9 @@ daemonset.apps "backpack-60ebe07c-5944-4169-8c4e-fbf9f9d79ad0" deleted
 
 If not privileged and with the default service account the data gathered will be limited.
 If you wish to obtain the full set of information you will need to allow the containers to be 
-privileged and setup a service account with proper read/view privileges. Please see
-backpack_role.yaml for a correctly configured service account.
+privileged and utilize a service account with proper read/view privileges. Please see
+backpack_role.yaml for a correctly configured service account (NOTE: this is created for you 
+when using the -x flag).
 
 It will launch the backpack daemon set, which is the containerized stockpile 
 we built above, on all nodes of the cluster (including the masters). 
