@@ -6,7 +6,6 @@
 
 CLEANUP=true
 PRIVILEGED=false
-ACCOUNT=false
 NAMESPACE=backpack
 UUID=`uuidgen`
 LABEL_NAME=""
@@ -20,14 +19,13 @@ do
         p) ES_PORT=${OPTARG};;
         n) NAMESPACE=${OPTARG};;
         x) PRIVILEGED=true;;
-        a) ACCOUNT=${OPTARG};;
         c) CLEANUP=${OPTARG};;
         u) UUID=${OPTARG};;
         l) LABEL_NAME=${OPTARG};;
         v) LABEL_VALUE=${OPTARG};;
         i) IMAGE=${OPTARG};;
-        h) echo "Usage: run_backpack.sh [-s ELASTICSERCH_SERVER] [-p ELASTICSEARCH_PORT] [-c true|false] [-n NAMESPACE] [-x] [-a true|false] [-u UUID] [-l LABEL_NAME] [-v LABEL_VALUE] [-i IMAGE]" ; exit ;;
-        ?) echo "Usage: run_backpack.sh [-s ELASTICSERCH_SERVER] [-p ELASTICSEARCH_PORT] [-c true|false] [-n NAMESPACE] [-x] [-a true|false] [-u UUID] [-l LABEL_NAME] [-v LABEL_VALUE] [-i IMAGE]" ; exit 1 ;;
+        h) echo "Usage: run_backpack.sh [-s ELASTICSERCH_SERVER] [-p ELASTICSEARCH_PORT] [-c true|false] [-n NAMESPACE] [-x] [-u UUID] [-l LABEL_NAME] [-v LABEL_VALUE] [-i IMAGE]" ; exit ;;
+        ?) echo "Usage: run_backpack.sh [-s ELASTICSERCH_SERVER] [-p ELASTICSEARCH_PORT] [-c true|false] [-n NAMESPACE] [-x] [-u UUID] [-l LABEL_NAME] [-v LABEL_VALUE] [-i IMAGE]" ; exit 1 ;;
     esac
 done
 
@@ -49,9 +47,21 @@ sed -i "s/{ELASTICSEARCH_PORT}/-p $ES_PORT/g" backpack_$UUID.yml
 sed -i "s/{PRIV}/$PRIVILEGED/g" backpack_$UUID.yml
 sed -i "s?{IMAGE}?$IMAGE?g" backpack_$UUID.yml
 
-if [[ $ACCOUNT == "true" ]]
+kubectl create namespace $NAMESPACE
+
+if [[ $PRIVILEGED == "true" ]]
 then
   sed -i "s/{ACCOUNT}/backpack-view/g" backpack_$UUID.yml
+  cp backpack_role.yaml backpack_role_$UUID.yaml
+  sed -i "s/{NAMESPACE}/$NAMESPACE/g" backpack_role_$UUID.yaml
+  kubectl apply -f backpack_role_$UUID.yaml
+  if [[ `command -v oc` ]]
+  then
+    if [[ `oc get securitycontextconstraints.security.openshift.io` ]]
+    then
+      oc adm policy -n $NAMESPACE add-scc-to-user privileged -z backpack-view
+    fi
+  fi
 else
   sed -i "s/{ACCOUNT}/default/g" backpack_$UUID.yml
 fi
@@ -70,15 +80,6 @@ then
                 values:
                 - $LABEL_VALUE
 EOT
-fi
-
-kubectl create namespace $NAMESPACE
-
-if [[ $ACCOUNT == "true" ]]
-then
-  cp backpack_role.yaml backpack_role_$UUID.yaml
-  sed -i "s/{NAMESPACE}/$NAMESPACE/g" backpack_role_$UUID.yaml
-  kubectl apply -f backpack_role_$UUID.yaml
 fi
 
 kubectl apply -f backpack_$UUID.yml
