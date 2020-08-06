@@ -1,27 +1,15 @@
-FROM centos/python-36-centos7
+FROM registry.access.redhat.com/ubi8:latest
 
-USER root
-COPY group_vars/ ${HOME}/group_vars/
-COPY hosts ${HOME}/hosts
-COPY ansible.cfg ${HOME}/
-COPY stockpile.yml ${HOME}/stockpile.yml
-COPY roles/ ${HOME}/roles/
-COPY stockpile-wrapper.py ${HOME}/stockpile-wrapper.py
-COPY scribe ${HOME}/scribe
-COPY kubectl /usr/local/bin/kubectl
-COPY oc /usr/local/bin/oc
+RUN dnf install -y --nodocs git python3-pip hostname dmidecode pciutils procps-ng && dnf clean all
+RUN pip3 install --no-cache-dir  ansible elasticsearch elasticsearch-dsl openshift kubernetes redis
+RUN git clone https://github.com/cloud-bulldozer/scribe ${HOME}/scribe --depth=1
+RUN pip3 install --no-cache-dir  -e ${HOME}/scribe
+RUN git clone https://github.com/cloud-bulldozer/stockpile.git --depth=1 /tmp/stockpile && mv /tmp/stockpile/* ${HOME}
+RUN sed -i '/become: true/d' ${HOME}/stockpile.yml
+RUN curl -sS https://raw.githubusercontent.com/cloud-bulldozer/bohica/master/stockpile-wrapper/stockpile-wrapper.py -o ${HOME}/stockpile-wrapper.py
+RUN curl -sS https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest/openshift-client-linux.tar.gz | tar xz -C /usr/bin/
+RUN chmod +x /usr/bin/oc /usr/bin/kubectl
+COPY ansible.cfg /etc/ansible/ansible.cfg
+COPY stockpile_hosts /root/hosts
 
-RUN yum install -y epel-release 
-RUN yum install -y ansible dmidecode which python-pip pciutils
-RUN pip3 install --upgrade pip
-RUN pip3 install elasticsearch-dsl
-RUN pip3 install openshift
-RUN pip3 install kubernetes
-RUN pip3 install redis
-RUN pip3 install -e scribe/
-RUN mv ansible.cfg /etc/ansible/ansible.cfg
-RUN mkdir -p /tmp
-RUN sed -i '/become: true/d' stockpile.yml
-RUN chmod +x /usr/local/bin/kubectl /usr/local/bin/oc
-
-CMD sleep infinity
+WORKDIR /root
