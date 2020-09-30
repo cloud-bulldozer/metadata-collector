@@ -34,7 +34,6 @@ echo "ES Server: "$ES_SERVER
 echo "ES Port: "$ES_PORT
 echo "Namespace: "$NAMESPACE
 echo "Privileged: "$PRIVILEGED
-echo "Account: "$ACCOUNT
 echo "Cleanup: "$CLEANUP
 echo "UUID: "$UUID
 
@@ -42,7 +41,7 @@ cp backpack_daemonset.yml backpack_$UUID.yml
 
 sed -i "s/{UUID}/$UUID/g" backpack_$UUID.yml
 sed -i "s/{NAMESPACE}/$NAMESPACE/g" backpack_$UUID.yml
-sed -i "s/{ELASTICSEARCH_SERVER}/-s $ES_SERVER/g" backpack_$UUID.yml
+sed -i "s?{ELASTICSEARCH_SERVER}?-s $ES_SERVER?g" backpack_$UUID.yml
 sed -i "s/{ELASTICSEARCH_PORT}/-p $ES_PORT/g" backpack_$UUID.yml
 sed -i "s/{PRIV}/$PRIVILEGED/g" backpack_$UUID.yml
 sed -i "s?{IMAGE}?$IMAGE?g" backpack_$UUID.yml
