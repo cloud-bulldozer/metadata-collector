@@ -1,7 +1,7 @@
 FROM registry.access.redhat.com/ubi8:latest
 
 RUN dnf install -y --nodocs git python3-pip hostname dmidecode pciutils procps-ng && dnf clean all
-RUN pip3 install --no-cache-dir  ansible elasticsearch elasticsearch-dsl openshift kubernetes redis
+RUN pip3 install --no-cache-dir --upgrade-strategy=only-if-needed ansible==2.10 kubernetes==11 elasticsearch elasticsearch-dsl openshift redis
 RUN mkdir -p /backpack && chmod 770 /backpack
 ENV HOME /backpack
 WORKDIR /backpack
