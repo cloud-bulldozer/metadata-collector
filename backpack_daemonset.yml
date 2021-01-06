@@ -36,7 +36,7 @@ spec:
       - name: backpack
         image: {IMAGE}
         command: ["/bin/sh", "-c"]
-        args: ["python3 stockpile-wrapper.py {ELASTICSEARCH_SERVER} {ELASTICSEARCH_PORT} -u {UUID} -n $my_node_name -N $my_pod_name --force && touch /tmp/indexed; sleep infinity"]
+        args: ["python3 stockpile-wrapper.py {ELASTICSEARCH_SERVER} {ELASTICSEARCH_PORT} -u {UUID} -n $my_node_name -N $my_pod_name --force --sslskipverify {ES_SSL} && touch /tmp/indexed; sleep infinity"]
         imagePullPolicy: Always
         # Set privileged to the appropriate value [true|false]
         securityContext:

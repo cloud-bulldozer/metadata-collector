@@ -34,7 +34,7 @@ def _connect_to_es(server, port, es_ssl):
         _es_connection_string = server + ':' + str(port)
     else:
         _es_connection_string = server
-    if es_ssl == "true":
+    if es_ssl:
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False
@@ -178,6 +178,7 @@ def main():
     parser.add_argument(
         '--sslskipverify',
         help='If es is setup with ssl, but can disable tls cert verification',
+        type=bool,
         default=False)
     parser.add_argument(
         '--index-retries',

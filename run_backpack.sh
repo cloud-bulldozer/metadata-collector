@@ -10,6 +10,7 @@ NAMESPACE=backpack
 UUID=`uuidgen`
 LABEL_NAME=""
 LABEL_VALUE=""
+ES_SSL=False
 IMAGE="quay.io/cloud-bulldozer/backpack:latest"
 
 while getopts s:p:n:xa:t:c:u:l:v:i:h flag
@@ -24,14 +25,16 @@ do
         l) LABEL_NAME=${OPTARG};;
         v) LABEL_VALUE=${OPTARG};;
         i) IMAGE=${OPTARG};;
-        h) echo "Usage: run_backpack.sh [-s ELASTICSERCH_SERVER] [-p ELASTICSEARCH_PORT] [-c true|false] [-n NAMESPACE] [-x] [-u UUID] [-l LABEL_NAME] [-v LABEL_VALUE] [-i IMAGE]" ; exit ;;
-        ?) echo "Usage: run_backpack.sh [-s ELASTICSERCH_SERVER] [-p ELASTICSEARCH_PORT] [-c true|false] [-n NAMESPACE] [-x] [-u UUID] [-l LABEL_NAME] [-v LABEL_VALUE] [-i IMAGE]" ; exit 1 ;;
+        a) ES_SSL=${OPTARG};;
+        h) echo "Usage: run_backpack.sh [-s ELASTICSERCH_SERVER] [-p ELASTICSEARCH_PORT] [-c true|false] [-n NAMESPACE] [-x] [-u UUID] [-l LABEL_NAME] [-v LABEL_VALUE] [-i IMAGE] [-a True|False]" ; exit ;;
+        ?) echo "Usage: run_backpack.sh [-s ELASTICSERCH_SERVER] [-p ELASTICSEARCH_PORT] [-c true|false] [-n NAMESPACE] [-x] [-u UUID] [-l LABEL_NAME] [-v LABEL_VALUE] [-i IMAGE] [-a True|False]" ; exit 1 ;;
     esac
 done
 
 echo "Running Backpack with the following options"
 echo "ES Server: "$ES_SERVER
 echo "ES Port: "$ES_PORT
+echo "SSL Enabled: "$ES_SSL
 echo "Namespace: "$NAMESPACE
 echo "Privileged: "$PRIVILEGED
 echo "Cleanup: "$CLEANUP
@@ -45,6 +48,7 @@ sed -i "s?{ELASTICSEARCH_SERVER}?-s $ES_SERVER?g" backpack_$UUID.yml
 sed -i "s/{ELASTICSEARCH_PORT}/-p $ES_PORT/g" backpack_$UUID.yml
 sed -i "s/{PRIV}/$PRIVILEGED/g" backpack_$UUID.yml
 sed -i "s?{IMAGE}?$IMAGE?g" backpack_$UUID.yml
+sed -i "s?{ES_SSL}?$ES_SSL?g" backpack_$UUID.yml
 
 kubectl create namespace $NAMESPACE
 

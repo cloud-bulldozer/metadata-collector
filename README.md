@@ -51,6 +51,7 @@ The script takes a few notable options:
 - -u: UUID - if you wish to pass a specific UUID otherwise one will be generated for you
 - -l: label name - if you wish to target servers with a specific label you can enter the label name here. It is expected to be used with -v for the value
 - -v: label value - if you wish to target servers with a specific label you can enter the label value here. It is expected to be used with -l for the name
+- -a: True|False - if we should use SSL for elasticsearch
 - -i: custom backpack image location
 - -h: help page
 
