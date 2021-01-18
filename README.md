@@ -22,10 +22,10 @@ The main script within backpack is the stockpile-wrapper. This can be located [h
 
 This wrapper script will run a collection of stockpile in the container and then, optionally, push it to an Elasticsearch instance.
 
-The two flags to the wrapper that will likely always be used is for indexing. Using -s and -p you can pass the Elasticsearch server and port information like this:
+The two flags to the wrapper that will likely always be used is for indexing. Using -s you can pass the Elasticsearch server and port information like this:
 
 ```
-python3 stockpile-wrapper.py -s foo.es -p 9200
+python3 stockpile-wrapper.py -s http://foo.es:9200
 ```
 
 ## Running with Podman/Docker
@@ -33,7 +33,7 @@ python3 stockpile-wrapper.py -s foo.es -p 9200
 In many cases backpack will be run with some container orchestration, however it can be run easily with podman as well.
 
 ```
-sudo podman run --privileged quay.io/cloud-bulldozer/backpack python3 stockpile-wrapper.py -s foo.es -p 9200
+sudo podman run --privileged quay.io/cloud-bulldozer/backpack python3 stockpile-wrapper.py -s http://foo.es:9200
 ```
 
 *NOTE* While it is not required to run the container in privileged mode, you will get far less information if done without privileges.
@@ -43,8 +43,7 @@ sudo podman run --privileged quay.io/cloud-bulldozer/backpack python3 stockpile-
 Backpack can be easily executed with the run_backpack.sh script in the kubernetes environment as well
 
 The script takes a few notable options:
-- -s: the elasticsearch server
-- -p: the elasticsearch port
+- -s: the elasticsearch server using the notation `http(s)://[es-user]@[es-password]:[es-url]:[es-port]`
 - -n: the namespace to be used (it will be created if it does not already exist but will NOT be delete)
 - -x: the pods should run with elevated privileges and a service account with elevated access
 - -c: true|false - if true after all pods have collected their data the daemonset will be cleaned up
@@ -64,10 +63,9 @@ Each run of the script will create a backpack_$UUID.yml file for the run. It wil
 An example execution:
 
 ```
-$ ./run_backpack.sh -s foo.es -p 9200 -c true -l foo -v bar2
+$ ./run_backpack.sh -s http://foo.es:9200 -c true -l foo -v bar2
 Running Backpack with the following options
-ES Server: foo.es
-ES Port: 9200
+ES Server: http://foo.es:9200
 Namespace: backpack
 Privileged: false
 Account: false

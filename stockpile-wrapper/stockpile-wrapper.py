@@ -29,11 +29,8 @@ from transcribe.render import transcribe
 from elasticsearch.helpers import parallel_bulk, BulkIndexError
 
 
-def _connect_to_es(server, port, es_ssl):
-    if port:
-        _es_connection_string = server + ':' + str(port)
-    else:
-        _es_connection_string = server
+def _connect_to_es(server, es_ssl):
+    _es_connection_string = server
     if es_ssl:
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         ssl_ctx = ssl.create_default_context()
@@ -172,10 +169,6 @@ def main():
         '-s', '--server',
         help='Provide elastic server information')
     parser.add_argument(
-        '-p', '--port',
-        type=int,
-        help='Provide elastic port information')
-    parser.add_argument(
         '--sslskipverify',
         help='If es is setup with ssl, but can disable tls cert verification',
         type=bool,
@@ -220,7 +213,7 @@ def main():
     my_pod = args.podname
 
     if args.server:
-        es = _connect_to_es(args.server, args.port, args.sslskipverify)
+        es = _connect_to_es(args.server, args.sslskipverify)
 
     run = "run"
     if args.redisip and args.redisport and my_node and my_uuid:

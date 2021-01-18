@@ -13,11 +13,10 @@ LABEL_VALUE=""
 ES_SSL=False
 IMAGE="quay.io/cloud-bulldozer/backpack:latest"
 
-while getopts s:p:n:xa:t:c:u:l:v:i:h flag
+while getopts s:n:xa:t:c:u:l:v:i:h flag
 do
     case "${flag}" in
         s) ES_SERVER=${OPTARG};;
-        p) ES_PORT=${OPTARG};;
         n) NAMESPACE=${OPTARG};;
         x) PRIVILEGED=true;;
         c) CLEANUP=${OPTARG};;
@@ -26,14 +25,13 @@ do
         v) LABEL_VALUE=${OPTARG};;
         i) IMAGE=${OPTARG};;
         a) ES_SSL=${OPTARG};;
-        h) echo "Usage: run_backpack.sh [-s ELASTICSERCH_SERVER] [-p ELASTICSEARCH_PORT] [-c true|false] [-n NAMESPACE] [-x] [-u UUID] [-l LABEL_NAME] [-v LABEL_VALUE] [-i IMAGE] [-a True|False]" ; exit ;;
-        ?) echo "Usage: run_backpack.sh [-s ELASTICSERCH_SERVER] [-p ELASTICSEARCH_PORT] [-c true|false] [-n NAMESPACE] [-x] [-u UUID] [-l LABEL_NAME] [-v LABEL_VALUE] [-i IMAGE] [-a True|False]" ; exit 1 ;;
+        h) echo "Usage: run_backpack.sh [-s ELASTICSEARCH_SERVER] [-c true|false] [-n NAMESPACE] [-x] [-u UUID] [-l LABEL_NAME] [-v LABEL_VALUE] [-i IMAGE] [-a True|False]" ; exit ;;
+        ?) echo "Usage: run_backpack.sh [-s ELASTICSEARCH_SERVER] [-c true|false] [-n NAMESPACE] [-x] [-u UUID] [-l LABEL_NAME] [-v LABEL_VALUE] [-i IMAGE] [-a True|False]" ; exit 1 ;;
     esac
 done
 
 echo "Running Backpack with the following options"
 echo "ES Server: "$ES_SERVER
-echo "ES Port: "$ES_PORT
 echo "SSL Enabled: "$ES_SSL
 echo "Namespace: "$NAMESPACE
 echo "Privileged: "$PRIVILEGED
@@ -45,7 +43,6 @@ cp backpack_daemonset.yml backpack_$UUID.yml
 sed -i "s/{UUID}/$UUID/g" backpack_$UUID.yml
 sed -i "s/{NAMESPACE}/$NAMESPACE/g" backpack_$UUID.yml
 sed -i "s?{ELASTICSEARCH_SERVER}?-s $ES_SERVER?g" backpack_$UUID.yml
-sed -i "s/{ELASTICSEARCH_PORT}/-p $ES_PORT/g" backpack_$UUID.yml
 sed -i "s/{PRIV}/$PRIVILEGED/g" backpack_$UUID.yml
 sed -i "s?{IMAGE}?$IMAGE?g" backpack_$UUID.yml
 sed -i "s?{ES_SSL}?$ES_SSL?g" backpack_$UUID.yml
