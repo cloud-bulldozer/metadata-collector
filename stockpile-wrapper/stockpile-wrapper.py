@@ -218,7 +218,7 @@ def main():
     run = "run"
     if args.redisip and args.redisport and my_node and my_uuid:
         pool = redis.ConnectionPool(host=args.redisip, port=args.redisport, decode_responses=True)
-        r = redis.Redis(connection_pool=pool, charset="utf-8")
+        r = redis.Redis(connection_pool=pool, charset="utf-8", retry_on_timeout=True)
 
         check_val = my_uuid + "-" + my_node
         run = _mark_node(r, my_node, my_uuid, es, check_val)
