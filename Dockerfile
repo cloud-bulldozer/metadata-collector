@@ -6,6 +6,8 @@ ENV HOME /backpack
 WORKDIR /backpack
 COPY stockpile-wrapper/stockpile-wrapper.py stockpile-wrapper.py
 COPY stockpile-wrapper/requirements.txt requirements.txt
+RUN pip3 install --upgrade pip
+RUN pip3 install --upgrade setuptools
 RUN pip3 install -r requirements.txt
 RUN git clone https://github.com/cloud-bulldozer/scribe --depth=1
 RUN pip3 install --no-cache-dir -e scribe
