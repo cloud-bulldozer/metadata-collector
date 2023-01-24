@@ -3,4 +3,4 @@ elasticsearch_dsl
 kubernetes < 12.0
 openshift
 redis
-ansible == 4.2.0
+ansible == 7.0.0
